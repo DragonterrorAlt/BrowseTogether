@@ -7,7 +7,7 @@
 </head>
 <body>
     <div id="game-room">
-        <iframe id="google-iframe" src="https://www.google.com"></iframe>
+        <iframe id="google-iframe" src="https://www.google.com?igu=1" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;"></iframe>
     </div>
     <script src="https://unpkg.com/netplayjs@0.4.1/dist/netplay.js"></script>
     <script>
@@ -24,9 +24,14 @@
 
         window.addEventListener('message', (event) => {
             if (event.data.type === 'update') {
+                // Handle the state update from the netplay.js session
+                // and update the Google iframe accordingly.
                 googleIframe.contentWindow.postMessage({ type: 'update', state: event.data.state }, '*');
             }
         });
+
+        // Start the netplay.js session
+        new netplayjs.RollbackWrapper(game).start();
     </script>
 </body>
 </html>
