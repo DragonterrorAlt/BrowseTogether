@@ -3,7 +3,9 @@
 <head>
 <title>BrowseTogether</title>
 <script src="https://unpkg.com/netplayjs@0.4.1/dist/netplay.js"></script>
-<script>
+</head>
+<body>
+  <script>
     class SimpleGame extends netplayjs.Game {
       // In the constructor, we initialize the state of our game.
       constructor() {
@@ -61,7 +63,5 @@
     // If your game cannot be rewound, you should use LockstepWrapper instead.
     new netplayjs.LockstepWrapper(SimpleGame).start();
     </script>
-</head>
-<body>
 </body>
 </html>
