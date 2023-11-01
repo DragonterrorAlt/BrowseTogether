@@ -1,37 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multiplayer Google Browser</title>
+  <style>
+    .page-container {
+      width: 100%;
+      height: 600px;
+      border: 1px solid black;
+      overflow: auto;
+    }
+  </style>
 </head>
 <body>
-    <div id="game-room">
-        <iframe id="google-iframe" src="https://www.google.com?igu=1" style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;"></iframe>
-    </div>
-    <script src="https://unpkg.com/netplayjs@0.4.1/dist/netplay.js"></script>
-    <script>
-        const game = new NetPlay({
-            autoConnect: true,
-            room: 'multiplayer-google-browser'
-        });
+  <div class="page-container">
+    <iframe id="page-iframe" src="https://www.google.com/?igu=1" width="100%" height="600px" frameborder="0"></iframe>
+  </div>
 
-        const googleIframe = document.getElementById('google-iframe');
+  <!-- Optional: Include the following line to use WebSocket.io for real-time updates -->
+  <script src="ttps://cdn.socket.io/4.4.1/socket.io.esm.min.js"></script>
+  <script>
+    const socket = io();
+    const iframe = document.getElementById('page-iframe');
 
-        game.on('update', (state) => {
-            googleIframe.contentWindow.postMessage({ type: 'update', state }, '*');
-        });
-
-        window.addEventListener('message', (event) => {
-            if (event.data.type === 'update') {
-                // Handle the state update from the netplay.js session
-                // and update the Google iframe accordingly.
-                googleIframe.contentWindow.postMessage({ type: 'update', state: event.data.state }, '*');
-            }
-        });
-
-        // Start the netplay.js session
-        new netplayjs.RollbackWrapper(game).start();
-    </script>
+    socket.on('update-iframe', (data) => {
+      iframe.contentWindow.document.open();
+      iframe.contentWindow.document.write(data);
+      iframe.contentWindow.document.close();
+    });
+  </script>
 </body>
 </html>
