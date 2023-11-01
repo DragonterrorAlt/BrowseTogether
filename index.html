@@ -1,31 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-    .page-container {
-      width: 100%;
-      height: 600px;
-      border: 1px solid black;
-      overflow: auto;
-    }
-  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-  <div class="page-container">
-    <iframe id="page-iframe" src="https://www.google.com/?igu=1" width="100%" height="600px" frameborder="0"></iframe>
-  </div>
-
-  <!-- Optional: Include the following line to use WebSocket.io for real-time updates -->
-  <script src="ttps://cdn.socket.io/4.4.1/socket.io.esm.min.js"></script>
-  <script>
-    const socket = io();
-    const iframe = document.getElementById('page-iframe');
-
-    socket.on('update-iframe', (data) => {
-      iframe.contentWindow.document.open();
-      iframe.contentWindow.document.write(data);
-      iframe.contentWindow.document.close();
-    });
-  </script>
+  <div id='include-from-outside'></div>
+  <script type='text/javascript'>
+    $('#include-from-outside').load('https://dragonterroralt.github.io/NapoleonGames/gamefiles/fnaf/index.html');
+  </script> 
 </body>
 </html>
