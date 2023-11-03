@@ -11,34 +11,26 @@
     </style>
   </head>
   <body>
-    <iframe id="video"></iframe>
-    <script>
-      // Create a DOM element for an iframe
-      const video = document.getElementById('video');
-
-      // Wrapper for the peerjs instance
-      const peer = peerjs.peer();
-
-      // Create a connection to the other tab
-      peer.on('connect', () => {
-        console.log('Connected to other tab');
-        // Share the iframe content
-        video.src = 'data:text/html,<iframe src="fnaf/index.html" style="width:300px;height:200px;"></iframe>';
-      });
-
-      // Handle the offer and answer from peerjs
-      peer.on('signal', (data) => {
-        console.log('Received signal', data);
-        // Send the offer or answer to the other tab
-        peer.send(data);
-      });
-
-      // Listen for incoming messages from the other tab
-      peer.on('data', (data) => {
-        console.log('Received data from other tab', data);
-        // Process the received data, e.g., update the iframe content
-      video.src = data;
-    });
+    <body>
+      <iframe id="video" src="https://example.com" sandbox="allow-scripts"></iframe>
+      <script>
+        // Listen for messages from the parent document
+        window.addEventListener('message', (event) => {
+          if (event.data.action === 'updateIframe') {
+            // Update the iframe content
+            document.getElementById('video').contentWindow.postMessage(
+              { action: 'updateIframe', payload: event.data.payload },
+              '*'
+            );
+          }
+        });
+  
+        // Send a message to the parent document to initiate the sync
+        window.parent.postMessage(
+          { action: 'initiateSync', payload: 'example-payload' },
+          '*'
+        );
+      </script>
   </script>
 </body>
 </html>
