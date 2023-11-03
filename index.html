@@ -1,14 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-</head>
-<body>
-  <script>
-    var TogetherJSConfig_autoStart = true;
-    var TogetherJSConfig_findRoom = "main";
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc/7.8.3/webrtc.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/2.3.0/peer.min.js"></script>
+    <style>
+      #video {
+        width: 300px;
+        height: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <iframe id="video"></iframe>
+    <script>
+      // Create a DOM element for an iframe
+      const video = document.getElementById('video');
+
+      // Wrapper for the peerjs instance
+      const peer = peerjs.peer();
+
+      // Create a connection to the other tab
+      peer.on('connect', () => {
+        console.log('Connected to other tab');
+        // Share the iframe content
+        video.src = 'data:text/html,<iframe src="https://example.com" style="width:300px;height:200px;"></iframe>';
+      });
+
+      // Handle the offer and answer from peerjs
+      peer.on('signal', (data) => {
+        console.log('Received signal', data);
+        // Send the offer or answer to the other tab
+        peer.send(data);
+      });
+
+      // Listen for incoming messages from the other tab
+      peer.on('data', (data) => {
+        console.log('Received data from other tab', data);
+        // Process the received data, e.g., update the iframe content
+      video.src = data;
+    });
   </script>
-    <script src="https://togetherjs.com/togetherjs-min.js"></script>
-<iframe style="position:fixed; top:0; left:0; bottom:0; right:0; width:100%; height:100%; border:none; margin:0; padding:0; overflow:hidden;" src="fnaf/index.html"></iframe>
 </body>
 </html>
